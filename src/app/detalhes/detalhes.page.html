@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalhes do Produto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="produto">
+  <ion-card>
+    <img [src]="produto.image">
+    <ion-card-header>
+      <ion-card-title>{{ produto.title }}</ion-card-title>
+      <ion-card-subtitle>{{ produto.price | priceFormat }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      {{ produto.description }}
+    </ion-card-content>
+  </ion-card>
+</ion-content>

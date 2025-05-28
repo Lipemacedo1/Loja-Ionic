@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Loja Virtual</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let produto of produtos" (click)="verDetalhes(produto.id)">
+    <img [src]="produto.image">
+    <ion-card-header>
+      <ion-card-title>{{ produto.title | uppercase }}</ion-card-title>
+      <ion-card-subtitle>{{ produto.price | priceFormat }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      {{ produto.description | slice:0:100 }}...
+    </ion-card-content>
+  </ion-card>
+</ion-content>
