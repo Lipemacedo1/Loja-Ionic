@@ -1,18 +1,108 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Loja Virtual</ion-title>
+    <ion-title>Ionic Store</ion-title>
+    
+    <!-- Navbar no topo -->
+    <div class="nav-buttons" slot="end">
+      <ion-button fill="clear" class="nav-button">
+        <ion-icon name="home"></ion-icon>
+        <span>Home</span>
+      </ion-button>
+      <ion-button fill="clear" class="nav-button">
+        <ion-icon name="search"></ion-icon>
+        <span>Search</span>
+      </ion-button>
+      <ion-button fill="clear" class="nav-button">
+        <ion-icon name="globe"></ion-icon>
+        <span>Website</span>
+      </ion-button>
+      <ion-button fill="clear" class="nav-button">
+        <ion-icon name="person"></ion-icon>
+        <span>Account</span>
+      </ion-button>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let produto of produtos" (click)="verDetalhes(produto.id)">
-    <img [src]="produto.image">
-    <ion-card-header>
-      <ion-card-title>{{ produto.title | uppercase }}</ion-card-title>
-      <ion-card-subtitle>{{ produto.price | priceFormat }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      {{ produto.description | slice:0:100 }}...
-    </ion-card-content>
-  </ion-card>
+  <!-- Seção de Categorias -->
+  <div class="categories-section">
+    <h2>Categories</h2>
+    <div class="categories">
+      <div class="category-chip active">All Products</div>
+      <div class="category-chip">Electronics</div>
+      <div class="category-chip">Clothing</div>
+      <div class="category-chip">Home</div>
+      <div class="category-chip">Beauty</div>
+    </div>
+  </div>
+
+  <!-- Seção de Produtos em Destaque -->
+  <div class="featured-section">
+    <h2>Featured Products <a href="#" class="view-all">View All</a></h2>
+    
+    <!-- Mensagem quando não tem produtos -->
+    <div *ngIf="produtos.length === 0" class="empty-message">
+      <strong>Oops!</strong>
+      <p>Nenhum produto disponível no momento.</p>
+    </div>
+
+    <!-- Lista de produtos da API -->
+    <div class="products-grid" *ngIf="produtos.length > 0">
+      <ion-card *ngFor="let produto of produtos" class="product-card" (click)="verDetalhes(produto.id)">
+        <div class="product-image-container">
+          <img [src]="produto.image" [alt]="produto.title" class="product-image">
+        </div>
+        <ion-card-header>
+          <ion-card-title>{{ produto.title | uppercase }}</ion-card-title>
+          <ion-card-subtitle>{{ produto.price | priceFormat }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <p class="product-description">{{ produto.description | slice:0:100 }}...</p>
+          <div class="product-rating">
+            <ion-icon name="star"></ion-icon>
+            <ion-icon name="star"></ion-icon>
+            <ion-icon name="star"></ion-icon>
+            <ion-icon name="star"></ion-icon>
+            <ion-icon name="star-half"></ion-icon>
+            <span class="rating-value">4.8</span>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Seção de Ofertas Especiais -->
+  <div class="offers-section">
+    <h2>Special Offers</h2>
+    <div class="offers-grid">
+      <ion-card class="offer-card">
+        <ion-icon name="gift" class="offer-icon"></ion-icon>
+        <ion-card-header>
+          <ion-card-title>Summer Sale</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>Up to 50% off</p>
+        </ion-card-content>
+      </ion-card>
+      <ion-card class="offer-card">
+        <ion-icon name="car" class="offer-icon"></ion-icon>
+        <ion-card-header>
+          <ion-card-title>Free Shipping</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <p>On orders over $100</p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
 </ion-content>
+
+<!-- Rodapé com botão View All reduzido -->
+<ion-footer>
+  <div class="footer-view-all">
+    <ion-button expand="block" fill="outline" class="view-all-button">
+      View All
+    </ion-button>
+  </div>
+</ion-footer>
