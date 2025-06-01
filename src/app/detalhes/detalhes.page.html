@@ -1,18 +1,62 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Detalhes do Produto</ion-title>
-  </ion-toolbar>
-</ion-header>
+<!-- detalhes.page.html -->
+<app-navbar></app-navbar>
 
-<ion-content *ngIf="produto">
-  <ion-card>
-    <img [src]="produto.image">
-    <ion-card-header>
-      <ion-card-title>{{ produto.title }}</ion-card-title>
-      <ion-card-subtitle>{{ produto.price | priceFormat }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      {{ produto.description }}
-    </ion-card-content>
-  </ion-card>
+<ion-content class="ion-padding" *ngIf="!carregando; else loading">
+  <div class="detail-container">
+    <ion-button fill="clear" routerLink="/home" class="back-button">
+      <ion-icon slot="start" name="arrow-back"></ion-icon>
+      Voltar para a loja
+    </ion-button>
+
+    <div *ngIf="produto">
+      <ion-card class="product-card">
+        <div class="product-image-container">
+          <img [src]="produto.image" [alt]="produto.title">
+        </div>
+        
+        <div class="card-content-wrapper">
+          <ion-card-header>
+            <ion-card-title>{{ produto.title }}</ion-card-title>
+            <div class="price">{{ produto.price | priceFormat }}</div>
+          </ion-card-header>
+
+          <ion-card-content>
+            <span class="category-badge">{{ produto.category }}</span>
+            
+            <div class="rating-container">
+              <div class="rating">
+                <ion-icon *ngFor="let star of [1,2,3,4,5]" 
+                         [name]="getStarIcon(star, produto.rating.rate)"></ion-icon>
+              </div>
+              <span class="rating-value">{{ produto.rating.rate | number:'1.1-1' }} ({{ produto.rating.count }} avaliações)</span>
+            </div>
+
+            <span class="section-title">Descrição</span>
+            <p class="description">{{ produto.description }}</p>
+
+            <ion-button expand="block" color="primary" class="add-to-cart">
+              <ion-icon name="cart" slot="start"></ion-icon>
+              Adicionar ao Carrinho
+            </ion-button>
+          </ion-card-content>
+        </div>
+      </ion-card>
+    </div>
+
+    <div *ngIf="!produto" class="ion-text-center ion-padding">
+      <ion-text color="danger">
+        <h2>Produto não encontrado</h2>
+      </ion-text>
+      <ion-button routerLink="/home" fill="clear">
+        Voltar para a loja
+      </ion-button>
+    </div>
+  </div>
 </ion-content>
+
+<ng-template #loading>
+  <div class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando produto...</p>
+  </div>
+</ng-template>

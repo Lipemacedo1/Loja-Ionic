@@ -1,108 +1,54 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Ionic Store</ion-title>
-    
-    <!-- Navbar no topo -->
-    <div class="nav-buttons" slot="end">
-      <ion-button fill="clear" class="nav-button">
-        <ion-icon name="home"></ion-icon>
-        <span>Home</span>
-      </ion-button>
-      <ion-button fill="clear" class="nav-button">
-        <ion-icon name="search"></ion-icon>
-        <span>Search</span>
-      </ion-button>
-      <ion-button fill="clear" class="nav-button">
-        <ion-icon name="globe"></ion-icon>
-        <span>Website</span>
-      </ion-button>
-      <ion-button fill="clear" class="nav-button">
-        <ion-icon name="person"></ion-icon>
-        <span>Account</span>
-      </ion-button>
-    </div>
-  </ion-toolbar>
-</ion-header>
+<app-navbar></app-navbar>
 
 <ion-content>
-  <!-- Seção de Categorias -->
-  <div class="categories-section">
-    <h2>Categories</h2>
-    <div class="categories">
-      <div class="category-chip active">All Products</div>
-      <div class="category-chip">Electronics</div>
-      <div class="category-chip">Clothing</div>
-      <div class="category-chip">Home</div>
-      <div class="category-chip">Beauty</div>
+  <div class="home-container">
+    <div class="section-header">
+      <h1>Nossos Produtos</h1>
+      <p>Encontre os melhores produtos com os melhores preços</p>
     </div>
-  </div>
-
-  <!-- Seção de Produtos em Destaque -->
-  <div class="featured-section">
-    <h2>Featured Products <a href="#" class="view-all">View All</a></h2>
     
-    <!-- Mensagem quando não tem produtos -->
-    <div *ngIf="produtos.length === 0" class="empty-message">
-      <strong>Oops!</strong>
-      <p>Nenhum produto disponível no momento.</p>
+    <div *ngIf="carregando" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Carregando produtos...</p>
     </div>
 
-    <!-- Lista de produtos da API -->
-    <div class="products-grid" *ngIf="produtos.length > 0">
+    <div *ngIf="!carregando && produtos.length === 0" class="empty-state">
+      <ion-icon name="sad-outline"></ion-icon>
+      <h2>Nenhum produto encontrado</h2>
+      <p>Não conseguimos carregar os produtos no momento.</p>
+      <ion-button (click)="carregarProdutos()" fill="clear">
+        <ion-icon slot="start" name="refresh"></ion-icon>
+        Tentar novamente
+      </ion-button>
+    </div>
+
+    <div class="products-grid">
       <ion-card *ngFor="let produto of produtos" class="product-card" (click)="verDetalhes(produto.id)">
-        <div class="product-image-container">
-          <img [src]="produto.image" [alt]="produto.title" class="product-image">
+        <div class="product-image">
+          <img [src]="produto.image" [alt]="produto.title" />
         </div>
-        <ion-card-header>
-          <ion-card-title>{{ produto.title | uppercase }}</ion-card-title>
-          <ion-card-subtitle>{{ produto.price | priceFormat }}</ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content>
-          <p class="product-description">{{ produto.description | slice:0:100 }}...</p>
+        
+        <div class="product-info">
+          <span class="product-category">{{ produto.category }}</span>
+          <h2 class="product-title">{{ produto.title }}</h2>
+          
+          <div class="product-price">{{ produto.price | number:'1.2-2' }}</div>
+          
           <div class="product-rating">
-            <ion-icon name="star"></ion-icon>
-            <ion-icon name="star"></ion-icon>
-            <ion-icon name="star"></ion-icon>
-            <ion-icon name="star"></ion-icon>
-            <ion-icon name="star-half"></ion-icon>
-            <span class="rating-value">4.8</span>
+            <div class="stars">
+              <ion-icon *ngFor="let star of [1,2,3,4,5]" 
+                       [name]="getStarIcon(star, produto.rating.rate)"></ion-icon>
+            </div>
+            <span class="rating-value">{{ produto.rating.rate | number:'1.1-1' }}</span>
+            <span class="rating-count">({{ produto.rating.count }})</span>
           </div>
-        </ion-card-content>
-      </ion-card>
-    </div>
-  </div>
-
-  <!-- Seção de Ofertas Especiais -->
-  <div class="offers-section">
-    <h2>Special Offers</h2>
-    <div class="offers-grid">
-      <ion-card class="offer-card">
-        <ion-icon name="gift" class="offer-icon"></ion-icon>
-        <ion-card-header>
-          <ion-card-title>Summer Sale</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>Up to 50% off</p>
-        </ion-card-content>
-      </ion-card>
-      <ion-card class="offer-card">
-        <ion-icon name="car" class="offer-icon"></ion-icon>
-        <ion-card-header>
-          <ion-card-title>Free Shipping</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <p>On orders over $100</p>
-        </ion-card-content>
+          
+          <ion-button expand="block" color="primary" (click)="$event.stopPropagation(); adicionarAoCarrinho(produto)">
+            <ion-icon name="cart" slot="start"></ion-icon>
+            Adicionar ao Carrinho
+          </ion-button>
+        </div>
       </ion-card>
     </div>
   </div>
 </ion-content>
-
-<!-- Rodapé com botão View All reduzido -->
-<ion-footer>
-  <div class="footer-view-all">
-    <ion-button expand="block" fill="outline" class="view-all-button">
-      View All
-    </ion-button>
-  </div>
-</ion-footer>

@@ -1,0 +1,100 @@
+// Mixins para estilos reutilizáveis
+
+// Botões
+@mixin button-variant($background, $color: color-contrast($background)) {
+  --background: #{$background};
+  --color: #{$color};
+  --border-color: #{$background};
+  --background-hover: #{darken($background, 5%)};
+  --color-hover: #{$color};
+  --border-color-hover: #{darken($background, 10%)};
+  --background-activated: #{darken($background, 10%)};
+  --color-activated: #{$color};
+  --border-color-activated: #{darken($background, 15%)};
+}
+
+// Cards
+@mixin card-style($background: var(--ion-card-background), $border-radius: var(--border-radius-md)) {
+  background: $background;
+  border-radius: $border-radius;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+}
+
+// Inputs
+@mixin input-style($background: var(--ion-item-background), $border-color: var(--ion-border-color)) {
+  --background: #{$background};
+  --border-color: #{$border-color};
+  --border-radius: var(--border-radius-sm);
+  --padding-start: var(--spacing-sm);
+  --padding-end: var(--spacing-sm);
+  --padding-top: var(--spacing-sm);
+  --padding-bottom: var(--spacing-sm);
+  --placeholder-color: var(--ion-color-medium);
+  --placeholder-opacity: 0.8;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  
+  &:focus {
+    --border-color: var(--ion-color-primary);
+    box-shadow: 0 0 0 2px rgba(var(--ion-color-primary-rgb), 0.15);
+  }
+}
+
+// Badges
+@mixin badge-variant($background, $color: color-contrast($background)) {
+  --background: #{$background};
+  --color: #{$color};
+  --padding-start: var(--spacing-xs);
+  --padding-end: var(--spacing-xs);
+  --padding-top: 2px;
+  --padding-bottom: 2px;
+  border-radius: var(--border-radius-pill);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// Sombras
+@mixin shadow($level: 'md') {
+  @if $level == 'sm' {
+    box-shadow: var(--shadow-sm);
+  } @else if $level == 'lg' {
+    box-shadow: var(--shadow-lg);
+  } @else {
+    box-shadow: var(--shadow-md);
+  }
+}
+
+// Transições
+@mixin transition($properties: all, $duration: var(--transition-normal), $timing: ease-in-out) {
+  $value: ();
+  
+  @each $property in $properties {
+    $value: append($value, #{$property} #{$duration} #{$timing}, comma);
+  }
+  
+  transition: $value;
+}
+
+// Responsividade
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == 'sm' {
+    @media (min-width: 576px) { @content; }
+  } @else if $breakpoint == 'md' {
+    @media (min-width: 768px) { @content; }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: 992px) { @content; }
+  } @else if $breakpoint == 'xl' {
+    @media (min-width: 1200px) { @content; }
+  } @else if $breakpoint == 'xxl' {
+    @media (min-width: 1400px) { @content; }
+  } @else {
+    @media (min-width: $breakpoint) { @content; }
+  }
+}

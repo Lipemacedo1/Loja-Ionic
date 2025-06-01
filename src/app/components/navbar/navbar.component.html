@@ -1,0 +1,23 @@
+<ion-toolbar>
+  <ion-title>Ionic Store</ion-title>
+  
+  <div class="nav-buttons" slot="end">
+    <app-theme-toggle></app-theme-toggle>
+    <a [routerLink]="['/home']" class="nav-button" routerLinkActive="active">
+      <ion-icon name="home"></ion-icon>
+      <span>Home</span>
+    </a>
+    <a [routerLink]="['/home']" class="nav-button">
+      <ion-icon name="search"></ion-icon>
+      <span>Search</span>
+    </a>
+    <a [routerLink]="['/home']" class="nav-button">
+      <ion-icon name="globe"></ion-icon>
+      <span>Website</span>
+    </a>
+    <a [routerLink]="['/home']" class="nav-button">
+      <ion-icon name="person"></ion-icon>
+      <span>Account</span>
+    </a>
+  </div>
+</ion-toolbar>

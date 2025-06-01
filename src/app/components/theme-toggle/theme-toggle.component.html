@@ -1,0 +1,10 @@
+<ion-item lines="none" class="theme-toggle">
+  <ion-icon slot="start" [name]="isDarkMode ? 'moon' : 'sunny'" color="primary"></ion-icon>
+  <ion-label>Tema</ion-label>
+  <ion-segment [value]="currentTheme" (ionChange)="setTheme($event.detail.value)">
+    <ion-segment-button *ngFor="let option of themeOptions" [value]="option.value">
+      <ion-icon [name]="option.icon"></ion-icon>
+      <ion-label>{{ option.label }}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-item>

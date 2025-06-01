@@ -1,0 +1,18 @@
+// Importações de funções e variáveis
+@use 'sass:map';
+@use 'sass:color';
+@use 'mixins/functions' as *;
+
+// Carrega as cores base
+@use 'colors/base' as *;
+
+// Carrega as variáveis de tema
+@use 'colors/theme' with (
+  $colors: $colors
+);
+
+// Carrega o tema escuro
+@use 'colors/dark-theme' as dark-theme;
+
+// Aplica o tema escuro quando necessário
+@include dark-theme.dark-theme-styles;
