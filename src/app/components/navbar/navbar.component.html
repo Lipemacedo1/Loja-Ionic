@@ -1,22 +1,36 @@
 <ion-toolbar>
-  <ion-title>Ionic Store</ion-title>
+  <ion-title *ngIf="!(isSearchOpen$ | async)">Ionic Store</ion-title>
+  
+  <!-- Barra de busca -->
+  <div *ngIf="isSearchOpen$ | async" class="search-container">
+    <ion-searchbar 
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearchInput($event)"
+      placeholder="Buscar produtos..."
+      animated
+      showCancelButton="always"
+      cancelButtonText="Cancelar"
+      (ionCancel)="closeSearch()"
+      class="search-bar">
+    </ion-searchbar>
+  </div>
   
   <div class="nav-buttons" slot="end">
-    <a [routerLink]="['/home']" class="nav-button" routerLinkActive="active">
+    <a [routerLink]="['/home']" class="nav-button" routerLinkActive="active" *ngIf="!(isSearchOpen$ | async)">
       <ion-icon name="home"></ion-icon>
       <span>Home</span>
     </a>
-    <a [routerLink]="['/home']" class="nav-button">
-      <ion-icon name="search"></ion-icon>
-      <span>Search</span>
+    <a (click)="toggleSearch()" class="nav-button" [class.active]="isSearchOpen$ | async">
+      <ion-icon [name]="(isSearchOpen$ | async) ? 'close' : 'search'"></ion-icon>
+      <span>{{ (isSearchOpen$ | async) ? 'Fechar' : 'Buscar' }}</span>
     </a>
-    <a [routerLink]="['/home']" class="nav-button">
+    <a [routerLink]="['/home']" class="nav-button" *ngIf="!(isSearchOpen$ | async)">
       <ion-icon name="globe"></ion-icon>
       <span>Website</span>
     </a>
-    <a [routerLink]="['/home']" class="nav-button">
+    <a [routerLink]="['/home']" class="nav-button" *ngIf="!(isSearchOpen$ | async)">
       <ion-icon name="person"></ion-icon>
-      <span>Account</span>
+      <span>Conta</span>
     </a>
   </div>
 </ion-toolbar>

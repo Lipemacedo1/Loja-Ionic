@@ -11,19 +11,26 @@
       <ion-spinner name="crescent"></ion-spinner>
       <p>Carregando produtos...</p>
     </div>
+    
+    <!-- Indicador de busca -->
+    <div *ngIf="buscando" class="searching-indicator">
+      <ion-spinner name="crescent" class="search-spinner"></ion-spinner>
+      <span>Buscando produtos...</span>
+    </div>
 
-    <div *ngIf="!carregando && produtos.length === 0" class="empty-state">
-      <ion-icon name="sad-outline"></ion-icon>
+    <div *ngIf="!carregando && produtosFiltrados.length === 0" class="empty-state">
+      <ion-icon name="search-outline"></ion-icon>
       <h2>Nenhum produto encontrado</h2>
-      <p>Não conseguimos carregar os produtos no momento.</p>
+      <p *ngIf="produtos.length > 0">Não encontramos produtos que correspondam à sua busca.</p>
+      <p *ngIf="produtos.length === 0">Não conseguimos carregar os produtos no momento.</p>
       <ion-button (click)="carregarProdutos()" fill="clear">
         <ion-icon slot="start" name="refresh"></ion-icon>
-        Tentar novamente
+        {{ produtos.length > 0 ? 'Limpar busca' : 'Tentar novamente' }}
       </ion-button>
     </div>
 
-    <div class="products-grid">
-      <ion-card *ngFor="let produto of produtos" class="product-card" (click)="verDetalhes(produto.id)">
+    <div class="products-grid" [class.filtering]="buscando">
+      <ion-card *ngFor="let produto of produtosFiltrados" class="product-card" (click)="verDetalhes(produto.id)">
         <div class="product-image">
           <img [src]="produto.image" [alt]="produto.title" />
         </div>

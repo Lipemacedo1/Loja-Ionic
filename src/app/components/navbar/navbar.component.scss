@@ -1,8 +1,29 @@
+// Barra de busca
+.search-container {
+  flex: 1;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 16px;
+  
+  .search-bar {
+    --background: white;
+    --border-radius: 20px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --placeholder-color: var(--ion-color-medium);
+    --color: var(--ion-color-dark);
+    --icon-color: var(--ion-color-medium);
+    padding: 8px 0;
+    
+    &.searchbar-has-focus {
+      --box-shadow: 0 2px 12px rgba(var(--ion-color-primary-rgb), 0.2);
+    }
+  }
+}
+
 .nav-buttons {
   display: flex;
   align-items: center;
   gap: 16px;
-
 
   .nav-button {
     display: flex;
@@ -35,7 +56,11 @@ ion-toolbar {
   --background: white;
   --color: #333;
   --border-width: 0 !important;
-  padding: 8px 64px;
+  padding: 8px 16px;
+  
+  @media (min-width: 768px) {
+    padding: 8px 64px;
+  }
 }
 
 ion-title {

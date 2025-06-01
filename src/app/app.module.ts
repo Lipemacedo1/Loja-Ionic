@@ -5,11 +5,13 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
 import { routes as appRoutes } from './routes';
+import { SearchService } from './services/search.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(appRoutes),
     provideHttpClient(),
+    SearchService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     importProvidersFrom(

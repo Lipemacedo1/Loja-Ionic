@@ -1,3 +1,22 @@
+/* Indicador de busca */
+.searching-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+  color: var(--ion-color-medium);
+  font-size: 1rem;
+  font-weight: 500;
+  
+  .search-spinner {
+    width: 20px;
+    height: 20px;
+    --color: var(--ion-color-primary);
+  }
+}
+
 /* Estilos gerais */
 ion-content {
   --padding-top: var(--spacing-lg);
@@ -13,6 +32,7 @@ ion-content {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
+  min-height: calc(100vh - 200px); /* Garante altura mínima para o conteúdo */
 }
 
 /* Seção de cabeçalho */
@@ -43,6 +63,13 @@ ion-content {
   gap: var(--spacing-xl);
   padding: var(--spacing-md) 0;
   margin-top: var(--spacing-xl);
+  transition: opacity 0.3s ease;
+  
+  /* Efeito suave ao filtrar */
+  &.filtering {
+    opacity: 0.6;
+    pointer-events: none;
+  }
 }
 
 /* Card de produto */
@@ -203,6 +230,44 @@ ion-content {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  padding: var(--spacing-xxl) var(--spacing-lg);
+  min-height: 50vh;
+  
+  ion-icon {
+    font-size: 4rem;
+    color: var(--ion-color-medium);
+    margin-bottom: var(--spacing-lg);
+    opacity: 0.7;
+  }
+  
+  h2 {
+    color: var(--ion-color-dark);
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 600;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 1rem;
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg);
+    line-height: 1.5;
+  }
+  
+  ion-button {
+    --padding-start: var(--spacing-lg);
+    --padding-end: var(--spacing-lg);
+    --border-radius: 20px;
+    font-weight: 500;
+    
+    ion-icon {
+      font-size: 1.2rem;
+      margin: 0 var(--spacing-xs) 0 0;
+      color: currentColor;
+    }
+  }
   padding: var(--spacing-xxl) var(--spacing-md);
   text-align: center;
   min-height: 50vh;
