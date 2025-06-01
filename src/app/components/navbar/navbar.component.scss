@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  padding-right: 8px;
+
 
   .nav-button {
     display: flex;
@@ -35,7 +35,7 @@ ion-toolbar {
   --background: white;
   --color: #333;
   --border-width: 0 !important;
-  padding: 0 16px;
+  padding: 8px 64px;
 }
 
 ion-title {
