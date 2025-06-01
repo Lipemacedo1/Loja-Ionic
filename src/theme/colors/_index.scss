@@ -1,66 +1,64 @@
-// Exporta as configurações de cores
-export {
-  $colors: (
-    // Cores primárias
-    'primary': (
-      'base': #1E3A8A,
-      'light': #3B82F6,
-      'lighter': #93C5FD,
-      'dark': #1A3379,
-      'darker': #0F1A4D,
-      'contrast': #FFFFFF
-    ),
-    
-    // Cores de sucesso
-    'success': (
-      'base': #10B981,
-      'light': #34D399,
-      'lighter': #A7F3D0,
-      'dark': #059669,
-      'darker': #047857,
-      'contrast': #FFFFFF
-    ),
-    
-    // Cores de alerta
-    'warning': (
-      'base': #F59E0B,
-      'light': #FBBF24,
-      'lighter': #FDE68A,
-      'dark': #D97706,
-      'darker': #B45309,
-      'contrast': #1F2937
-    ),
-    
-    // Cores de erro
-    'danger': (
-      'base': #EF4444,
-      'light': #F87171,
-      'lighter': #FECACA,
-      'dark': #DC2626,
-      'darker': #B91C1C,
-      'contrast': #FFFFFF
-    ),
-    
-    // Cores neutras
-    'neutral': (
-      'white': #FFFFFF,
-      'lightest': #F9FAFB,
-      'lighter': #F3F4F6,
-      'light': #E5E7EB,
-      'base': #9CA3AF,
-      'dark': #6B7280,
-      'darker': #4B5563,
-      'darkest': #1F2937,
-      'black': #111827
-    )
-  ) !default;
+// Cores base da aplicação
+$colors: (
+  // Cores primárias
+  'primary': (
+    'base': #1E3A8A,
+    'light': #3B82F6,
+    'lighter': #93C5FD,
+    'dark': #1A3379,
+    'darker': #0F1A4D,
+    'contrast': #FFFFFF
+  ),
   
-  :export {
-    // Exporta as cores para uso em JavaScript/TypeScript
-    @each $category, $shades in $colors {
-      @each $shade, $value in $shades {
-        #{$category}-#{$shade}: $value;
-      }
+  // Cores de sucesso
+  'success': (
+    'base': #10B981,
+    'light': #34D399,
+    'lighter': #A7F3D0,
+    'dark': #059669,
+    'darker': #047857,
+    'contrast': #FFFFFF
+  ),
+  
+  // Cores de alerta
+  'warning': (
+    'base': #F59E0B,
+    'light': #FBBF24,
+    'lighter': #FDE68A,
+    'dark': #D97706,
+    'darker': #B45309,
+    'contrast': #1F2937
+  ),
+  
+  // Cores de erro
+  'danger': (
+    'base': #EF4444,
+    'light': #F87171,
+    'lighter': #FECACA,
+    'dark': #DC2626,
+    'darker': #B91C1C,
+    'contrast': #FFFFFF
+  ),
+  
+  // Cores neutras
+  'neutral': (
+    'white': #FFFFFF,
+    'lightest': #F9FAFB,
+    'lighter': #F3F4F6,
+    'light': #E5E7EB,
+    'base': #9CA3AF,
+    'dark': #6B7280,
+    'darker': #4B5563,
+    'darkest': #1F2937,
+    'black': #111827
+  )
+) !default;
+
+// Exporta as cores para uso em JavaScript/TypeScript
+:export {
+  @each $category, $shades in $colors {
+    @each $shade, $value in $shades {
+      #{$category}-#{$shade}: $value;
     }
   }
 }

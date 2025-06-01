@@ -1,7 +1,7 @@
 // Tema de cores da aplicação
 @use 'sass:map';
 @use 'sass:color';
-@use '../../../theme/mixins/functions' as *;
+@use '../../mixins/functions' as *;
 
 // Variável para armazenar as cores
 $theme-colors: $colors !default;

@@ -23,15 +23,6 @@ export class HomePage implements OnInit {
   produtos: any[] = [];
   carregando: boolean = true;
 
-  currentTheme = 'light';
-  isDarkMode = false;
-
-  themeOptions = [
-    { value: 'light', label: 'Claro', icon: 'sunny' },
-    { value: 'dark', label: 'Escuro', icon: 'moon' },
-    { value: 'system', label: 'Sistema', icon: 'desktop' }
-  ];
-
   constructor(
     private produtoService: ProdutoService,
     private router: Router
@@ -39,16 +30,18 @@ export class HomePage implements OnInit {
 
   ngOnInit(): void {
     this.carregarProdutos();
-    this.inicializarTema();
   }
 
   carregarProdutos(): void {
+    this.carregando = true;
     this.produtoService.listarProdutos().subscribe({
       next: (res: any) => {
         this.produtos = res;
+        this.carregando = false;
       },
       error: (err: any) => {
         console.error('Erro ao carregar produtos', err);
+        this.carregando = false;
       }
     });
   }
@@ -57,36 +50,13 @@ export class HomePage implements OnInit {
     this.router.navigate(['/detalhes', id]);
   }
 
-  async adicionarAoCarrinho(produto: any): Promise<void> {
+  adicionarAoCarrinho(produto: any): void {
     console.log('Produto adicionado ao carrinho:', produto);
-    const toast = document.createElement('ion-toast');
-    toast.message = `${produto.title} adicionado ao carrinho!`;
-    toast.duration = 2000;
-    toast.position = 'top';
-    document.body.appendChild(toast);
-    await toast.present();
+    // Aqui você pode adicionar a lógica para adicionar ao carrinho
   }
 
-  getStarIcon(star: number, rating: number): string {
-    return star <= Math.round(rating) ? 'star' : 'star-outline';
-  }
-
-  onThemeChange(event: CustomEvent): void {
-    const newTheme = event.detail.value;
-    this.currentTheme = newTheme;
-    this.isDarkMode = newTheme === 'dark';
-
-    // Aplica o tema
-    document.body.classList.toggle('dark', this.isDarkMode);
-
-    // Salva no localStorage
-    localStorage.setItem('theme', newTheme);
-  }
-
-  inicializarTema(): void {
-    const temaSalvo = localStorage.getItem('theme') || 'light';
-    this.currentTheme = temaSalvo;
-    this.isDarkMode = temaSalvo === 'dark';
-    document.body.classList.toggle('dark', this.isDarkMode);
+  getStarIcon(star: number, rating: any): string {
+    const rate = typeof rating === 'number' ? rating : rating?.rate || 0;
+    return star <= Math.round(rate) ? 'star' : 'star-outline';
   }
 }
