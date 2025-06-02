@@ -74,6 +74,7 @@ ion-content {
 
 /* Card de produto */
 .product-card {
+  cursor: pointer;
   border-radius: var(--border-radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-md);

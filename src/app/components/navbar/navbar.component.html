@@ -1,5 +1,7 @@
 <ion-toolbar>
-  <ion-title *ngIf="!(isSearchOpen$ | async)">Ionic Store</ion-title>
+  <ion-title *ngIf="!(isSearchOpen$ | async)" class="logo-container">
+    <img src="assets/Logo.png" alt="Logo" class="logo-image">
+  </ion-title>
   
   <!-- Barra de busca -->
   <div *ngIf="isSearchOpen$ | async" class="search-container">
@@ -23,14 +25,6 @@
     <a (click)="toggleSearch()" class="nav-button" [class.active]="isSearchOpen$ | async">
       <ion-icon [name]="(isSearchOpen$ | async) ? 'close' : 'search'"></ion-icon>
       <span>{{ (isSearchOpen$ | async) ? 'Fechar' : 'Buscar' }}</span>
-    </a>
-    <a [routerLink]="['/home']" class="nav-button" *ngIf="!(isSearchOpen$ | async)">
-      <ion-icon name="globe"></ion-icon>
-      <span>Website</span>
-    </a>
-    <a [routerLink]="['/home']" class="nav-button" *ngIf="!(isSearchOpen$ | async)">
-      <ion-icon name="person"></ion-icon>
-      <span>Conta</span>
     </a>
   </div>
 </ion-toolbar>
