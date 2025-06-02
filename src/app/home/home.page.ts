@@ -7,6 +7,8 @@ import { ProdutoService } from '../services/produto.service';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 import { SearchService } from '../services/search.service';
 import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { PromocaoDirective } from '../directives/promocao.directive';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +20,8 @@ import { Subscription } from 'rxjs';
     IonicModule,
     RouterModule,
     PriceFormatPipe,
-    NavbarComponent
+    NavbarComponent,
+    PromocaoDirective
   ]
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -55,22 +58,18 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   private filtrarProdutos(termo: string): void {
-    // Cancela o timeout anterior se existir
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
 
-    // Se o termo estiver vazio, mostra todos os produtos
     if (!termo) {
       this.buscando = false;
       this.produtosFiltrados = [...this.produtos];
       return;
     }
 
-    // Mostra o indicador de busca
     this.buscando = true;
 
-    // Adiciona um pequeno atraso para evitar buscas muito rápidas
     this.searchTimeout = setTimeout(() => {
       this.produtosFiltrados = this.produtos.filter(produto =>
         produto.title.toLowerCase().includes(termo) ||
@@ -96,17 +95,16 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  verDetalhes(id: number): void {
-    this.router.navigate(['/detalhes', id]);
+  verDetalhes(produtoId: number): void {
+    this.router.navigate(['/detalhes', produtoId]);
   }
 
   adicionarAoCarrinho(produto: any): void {
+    // Lógica para adicionar ao carrinho
     console.log('Produto adicionado ao carrinho:', produto);
-    // Aqui você pode adicionar a lógica para adicionar ao carrinho
   }
 
-  getStarIcon(star: number, rating: any): string {
-    const rate = typeof rating === 'number' ? rating : rating?.rate || 0;
-    return star <= Math.round(rate) ? 'star' : 'star-outline';
+  getStarIcon(star: number, rating: number): string {
+    return star <= Math.round(rating) ? 'star' : 'star-outline';
   }
 }
