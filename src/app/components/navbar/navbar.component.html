@@ -18,13 +18,20 @@
   </div>
   
   <div class="nav-buttons" slot="end">
-    <a [routerLink]="['/home']" class="nav-button" routerLinkActive="active" *ngIf="!(isSearchOpen$ | async)">
+    <button (click)="irParaHome()" class="nav-button" [class.active]="router.url === '/home' && !isPromocao">
       <ion-icon name="home"></ion-icon>
       <span>Home</span>
-    </a>
-    <a (click)="toggleSearch()" class="nav-button" [class.active]="isSearchOpen$ | async">
+    </button>
+    
+    <!-- Botão de promoção -->
+    <button (click)="irParaPromocao()" class="nav-button" [class.active]="isPromocao">
+      <ion-icon name="pricetag"></ion-icon>
+      <span>Promoção</span>
+    </button>
+    
+    <button (click)="toggleSearch()" class="nav-button" [class.active]="isSearchOpen$ | async">
       <ion-icon [name]="(isSearchOpen$ | async) ? 'close' : 'search'"></ion-icon>
       <span>{{ (isSearchOpen$ | async) ? 'Fechar' : 'Buscar' }}</span>
-    </a>
+    </button>
   </div>
 </ion-toolbar>

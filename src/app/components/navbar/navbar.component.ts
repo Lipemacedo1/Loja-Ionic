@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
@@ -22,13 +22,25 @@ import { take } from 'rxjs/operators';
 export class NavbarComponent implements OnInit, OnDestroy {
   isSearchOpen$ = this.searchService.isSearchOpen();
   searchTerm: string = '';
+  isPromocao = false;
   private searchSubscription: Subscription | undefined;
-
-  constructor(private searchService: SearchService) {}
+  
+  constructor(
+    private searchService: SearchService,
+    public router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     // Inicializa a busca com uma string vazia quando o componente é carregado
-    this.searchService.setSearchTerm('');
+    this.searchService.getSearchTerm().pipe(take(1)).subscribe(term => {
+      this.searchTerm = term;
+    });
+    
+    // Verifica os parâmetros da rota para definir o estado de promoção
+    this.searchSubscription = this.route.queryParams.subscribe(params => {
+      this.isPromocao = params['promocao'] === 'true';
+    });
   }
 
   ngOnDestroy(): void {
@@ -50,8 +62,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   onSearchInput(event: any): void {
-    const searchTerm = event.target?.value || '';
-    this.searchService.setSearchTerm(searchTerm.trim().toLowerCase());
+    const term = event.target?.value || '';
+    this.searchService.setSearchTerm(term);
+  }
+
+  irParaHome(): void {
+    this.router.navigate(['/home']);
+  }
+
+  irParaPromocao(): void {
+    this.router.navigate(['/home'], { queryParams: { promocao: 'true' } });
   }
 
   closeSearch(): void {

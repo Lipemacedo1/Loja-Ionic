@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { PriceFormatPipe } from '../pipes/price-format.pipe';
 import { ProdutoService } from '../services/produto.service';
-import { NavbarComponent } from '../components/navbar/navbar.component';
 import { SearchService } from '../services/search.service';
 import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { PromocaoDirective } from '../directives/promocao.directive';
+import { NavbarComponent } from '../components/navbar/navbar.component';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +18,12 @@ import { PromocaoDirective } from '../directives/promocao.directive';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     IonicModule,
     RouterModule,
     PriceFormatPipe,
-    NavbarComponent,
-    PromocaoDirective
+    PromocaoDirective,
+    NavbarComponent
   ]
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -35,12 +37,19 @@ export class HomePage implements OnInit, OnDestroy {
   constructor(
     private produtoService: ProdutoService,
     private router: Router,
+    private route: ActivatedRoute,
     private searchService: SearchService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarProdutos();
     this.iniciarBusca();
+    
+    // Verifica os parâmetros da rota para aplicar o filtro de promoção
+    this.route.queryParams.subscribe(params => {
+      const promocaoAtiva = params['promocao'] === 'true';
+      this.aplicarFiltros(undefined, promocaoAtiva);
+    });
   }
 
   ngOnDestroy(): void {
@@ -49,35 +58,18 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
-  private iniciarBusca(): void {
-    this.searchSubscription = this.searchService.getSearchTerm().subscribe(term => {
-      if (this.produtos.length > 0) {
-        this.filtrarProdutos(term);
-      }
+  iniciarBusca(): void {
+    // Configura a busca por termo
+    this.searchSubscription = this.searchService.getSearchTerm().subscribe(termo => {
+      this.aplicarFiltros(termo);
     });
-  }
 
-  private filtrarProdutos(termo: string): void {
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout);
-    }
-
-    if (!termo) {
-      this.buscando = false;
-      this.produtosFiltrados = [...this.produtos];
-      return;
-    }
-
-    this.buscando = true;
-
-    this.searchTimeout = setTimeout(() => {
-      this.produtosFiltrados = this.produtos.filter(produto =>
-        produto.title.toLowerCase().includes(termo) ||
-        produto.description.toLowerCase().includes(termo) ||
-        produto.category.toLowerCase().includes(termo)
-      );
-      this.buscando = false;
-    }, 300);
+    // Adiciona a subscrição para o filtro de promoção
+    this.searchSubscription.add(
+      this.searchService.getPromocaoFilter().subscribe(promocaoAtivo => {
+        this.aplicarFiltros(undefined, promocaoAtivo);
+      })
+    );
   }
 
   carregarProdutos(): void {
@@ -85,7 +77,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.produtoService.listarProdutos().subscribe({
       next: (res: any) => {
         this.produtos = res;
-        this.produtosFiltrados = [...this.produtos];
+        this.aplicarFiltros();
         this.carregando = false;
       },
       error: (err: any) => {
@@ -93,6 +85,30 @@ export class HomePage implements OnInit, OnDestroy {
         this.carregando = false;
       }
     });
+  }
+
+  aplicarFiltros(termoBusca?: string, promocaoAtivo: boolean = false): void {
+    this.buscando = true;
+    
+    // Se não há termo de busca e nem filtro de promoção ativo, mostra todos os produtos
+    if ((!termoBusca || termoBusca.trim() === '') && !promocaoAtivo) {
+      this.produtosFiltrados = [...this.produtos];
+      this.buscando = false;
+      return;
+    }
+    
+    // Aplica os filtros
+    this.produtosFiltrados = this.produtos.filter(produto => {
+      const buscaCorresponde = !termoBusca || 
+        produto.title.toLowerCase().includes(termoBusca.toLowerCase()) ||
+        (produto.description && produto.description.toLowerCase().includes(termoBusca.toLowerCase()));
+      
+      const promocaoCorresponde = !promocaoAtivo || (produto.price && produto.price < 100);
+      
+      return buscaCorresponde && promocaoCorresponde;
+    });
+    
+    this.buscando = false;
   }
 
   verDetalhes(produtoId: number): void {
