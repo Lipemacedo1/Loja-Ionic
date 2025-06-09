@@ -1,0 +1,98 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Carrinho de Compras</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div *ngIf="carregando" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando carrinho...</p>
+  </div>
+
+  <div *ngIf="!carregando && carrinho.length === 0" class="empty-cart">
+    <ion-icon name="cart-outline" class="empty-icon"></ion-icon>
+    <h2>Seu carrinho está vazio</h2>
+    <p>Adicione itens ao carrinho para continuar</p>
+    <ion-button routerLink="/home" expand="block" class="ion-margin-top">
+      Ver Produtos
+    </ion-button>
+  </div>
+
+  <ion-list *ngIf="!carregando && carrinho.length > 0" lines="none">
+    <ion-item-sliding *ngFor="let item of carrinho; let i = index">
+      <ion-item>
+        <ion-thumbnail slot="start">
+          <img [src]="item.image" [alt]="item.title" />
+        </ion-thumbnail>
+        
+        <ion-label>
+          <div class="item-header">
+            <h3>{{ item.title }}</h3>
+            <ion-badge *ngIf="item.price < 100" color="danger" class="promo-badge">
+              <ion-icon name="pricetag"></ion-icon> Promoção
+            </ion-badge>
+          </div>
+          <p>{{ item.price | currency:'BRL' }}</p>
+          
+          <div class="quantity-selector">
+            <ion-button (click)="diminuirQuantidade(item)" fill="clear" size="small">
+              <ion-icon name="remove"></ion-icon>
+            </ion-button>
+            
+            <ion-input 
+              type="number" 
+              [value]="item.quantidade" 
+              min="1" 
+              (ionChange)="$event && atualizarQuantidade(item, $event)"
+              class="quantity-input"
+            ></ion-input>
+            
+            <ion-button (click)="aumentarQuantidade(item)" fill="clear" size="small">
+              <ion-icon name="add"></ion-icon>
+            </ion-button>
+          </div>
+        </ion-label>
+        
+        <div slot="end" class="item-total">
+          <div class="price-container" [class.promo-price]="item.price < 100">
+            {{ (item.price * item.quantidade) | currency:'BRL' }}
+            <span *ngIf="item.price < 100" class="discount-badge">
+              Economize {{ (item.quantidade * (item.price * 0.2)) | currency:'BRL' }}
+            </span>
+          </div>
+          <ion-button (click)="removerItem(i)" fill="clear" color="danger" size="small">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+      
+      <ion-item-options side="end">
+        <ion-item-option (click)="removerItem(i)" color="danger">
+          <ion-icon slot="icon-only" name="trash"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <ion-footer *ngIf="!carregando && carrinho.length > 0">
+    <ion-toolbar>
+      <div class="checkout-container">
+        <div class="total-container">
+          <h3>Total</h3>
+          <h2>{{ total | currency:'BRL':'symbol':'1.2-2' }}</h2>
+        </div>
+        <ion-button 
+          expand="block" 
+          size="large" 
+          (click)="finalizarCompra()"
+          class="checkout-button">
+          Finalizar Compra
+        </ion-button>
+      </div>
+    </ion-toolbar>
+  </ion-footer>
+</ion-content>

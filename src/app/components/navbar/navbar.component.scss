@@ -16,10 +16,14 @@
 .search-container {
   flex: 1;
   max-width: 600px;
+  width: 100%;
   margin: 0 auto;
   padding: 0 16px;
+  display: flex;
+  align-items: center;
   
-  .search-bar {
+  ion-searchbar {
+    width: 100%;
     --background: white;
     --border-radius: 20px;
     --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -30,6 +34,19 @@
     
     &.searchbar-has-focus {
       --box-shadow: 0 2px 12px rgba(var(--ion-color-primary-rgb), 0.2);
+    }
+    
+    .searchbar-input-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .searchbar-search-icon {
+      display: none !important;
+    }
+    
+    .searchbar-clear-button {
+      display: flex !important;
     }
   }
 }

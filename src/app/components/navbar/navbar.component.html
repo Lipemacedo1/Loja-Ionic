@@ -18,6 +18,11 @@
   </div>
   
   <div class="nav-buttons" slot="end">
+    <ion-button routerLink="/carrinho" class="nav-button">
+      <ion-icon name="cart" slot="icon-only"></ion-icon>
+      <ion-badge color="danger" *ngIf="carrinhoItens > 0" class="cart-badge">{{ carrinhoItens }}</ion-badge>
+    </ion-button>
+    
     <button (click)="irParaHome()" class="nav-button" [class.active]="router.url === '/home' && !isPromocao">
       <ion-icon name="home"></ion-icon>
       <span>Home</span>

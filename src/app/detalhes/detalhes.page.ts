@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { IonicModule, ToastController } from '@ionic/angular';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PriceFormatPipe } from '../pipes/price-format.pipe';
 import { ProdutoService } from '../services/produto.service';
+import { CarrinhoService } from '../services/carrinho.service';
 import { NavbarComponent } from '../components/navbar/navbar.component';
 
 @Component({
@@ -16,7 +18,8 @@ import { NavbarComponent } from '../components/navbar/navbar.component';
     IonicModule, 
     RouterModule, 
     PriceFormatPipe, 
-    NavbarComponent
+    NavbarComponent,
+    FormsModule
   ]
 })
 export class DetalhesPage implements OnInit {
@@ -25,7 +28,10 @@ export class DetalhesPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private produtoService: ProdutoService
+    private router: Router,
+    private produtoService: ProdutoService,
+    private carrinhoService: CarrinhoService,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -44,6 +50,60 @@ export class DetalhesPage implements OnInit {
       console.error('Erro ao carregar produto', erro);
     } finally {
       this.carregando = false;
+    }
+  }
+
+  quantidade: number = 1;
+
+  async adicionarAoCarrinho() {
+    if (this.produto) {
+      // Criar um item de carrinho com os dados necessários
+      const itemCarrinho = {
+        id: this.produto.id,
+        title: this.produto.title,
+        price: this.produto.price,
+        image: this.produto.image,
+        description: this.produto.description,
+        category: this.produto.category,
+        rating: this.produto.rating,
+        quantidade: Math.max(1, Math.min(100, this.quantidade || 1)) // Garante que a quantidade esteja entre 1 e 100
+      };
+      
+      // Adiciona o item ao carrinho
+      this.carrinhoService.adicionarItem(itemCarrinho);
+      
+      // Exibe um toast de confirmação
+      const toast = await this.toastController.create({
+        message: `${itemCarrinho.quantidade}x ${this.produto.title} adicionado ao carrinho!`,
+        duration: 2000,
+        position: 'bottom',
+        color: 'success',
+        buttons: [
+          {
+            text: 'Ver Carrinho',
+            handler: () => {
+              this.router.navigate(['/carrinho']);
+            }
+          }
+        ]
+      });
+      
+      await toast.present();
+      
+      // Resetar a quantidade após adicionar ao carrinho
+      this.quantidade = 1;
+    }
+  }
+  
+  aumentarQuantidade() {
+    if (this.quantidade < 100) {
+      this.quantidade++;
+    }
+  }
+  
+  diminuirQuantidade() {
+    if (this.quantidade > 1) {
+      this.quantidade--;
     }
   }
 

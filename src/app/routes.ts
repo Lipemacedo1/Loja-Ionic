@@ -16,6 +16,10 @@ export const routes: Routes = [
     loadComponent: () => import('./detalhes/detalhes.page').then(m => m.DetalhesPage)
   },
   {
+    path: 'carrinho',
+    loadComponent: () => import('./carrinho/carrinho.page').then(m => m.CarrinhoPage)
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },

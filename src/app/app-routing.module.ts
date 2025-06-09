@@ -18,7 +18,11 @@ const routes: Routes = [
   {
     path: '**',
     redirectTo: 'home'
+  },  {
+    path: 'carrinho',
+    loadChildren: () => import('./carrinho/carrinho.module').then( m => m.CarrinhoPageModule)
   }
+
 ];
 
 @NgModule({

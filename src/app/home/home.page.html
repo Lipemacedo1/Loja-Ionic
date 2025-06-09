@@ -33,23 +33,36 @@
       <ion-card 
         *ngFor="let produto of produtosFiltrados" 
         class="product-card" 
-        (click)="verDetalhes(produto.id)"
-        appPromocao
-        [emPromocao]="produto.price < 100">
+        [class.promocao]="produto.price < 100"
+        (click)="verDetalhes(produto.id)">
+        
+        <!-- Ribbon de promoção -->
+        <div *ngIf="produto.price < 100" class="promo-ribbon">
+          <ion-icon name="pricetag"></ion-icon>
+          <span>PROMOÇÃO</span>
+        </div>
+        
         <div class="product-image">
           <img [src]="produto.image" [alt]="produto.title" />
         </div>
         <ion-card-header>
           <ion-card-title>{{ produto.title | slice:0:30 }}{{ produto.title.length > 30 ? '...' : '' }}</ion-card-title>
           <ion-card-subtitle>{{ produto.category }}</ion-card-subtitle>
+          
+          <!-- Preço com destaque para promoção -->
+          <div class="price-container" [class.promo-price]="produto.price < 100">
+            <span class="price">{{ produto.price | currency:'BRL':'symbol':'1.2-2' }}</span>
+            <span *ngIf="produto.price < 100" class="discount-badge">
+              Economize {{ (produto.price * 0.2) | currency:'BRL' }}
+            </span>
+          </div>
         </ion-card-header>
         <ion-card-content>
-          <div class="product-price">
-            <span class="price">{{ produto.price | currency:'BRL':'symbol':'1.2-2' }}</span>
+          <div class="product-actions">
             <ion-button 
               size="small" 
               color="primary" 
-              (click)="$event.stopPropagation(); adicionarAoCarrinho(produto)">
+              (click)="$event.stopPropagation(); adicionarAoCarrinho(produto, $event)">
               <ion-icon name="cart" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
@@ -59,5 +72,43 @@
         </ion-card-content>
       </ion-card>
     </div>
+
+    <!-- Controles de Paginação -->
+    <div class="pagination-container" *ngIf="!carregando && produtosFiltrados.length > 0">
+      <ion-button 
+        [disabled]="paginaAtual === 1" 
+        (click)="mudarPagina(paginaAtual - 1)"
+        fill="clear"
+        class="pagination-button">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        Anterior
+      </ion-button>
+      
+      <div class="page-numbers">
+        <span 
+              [class.active]="true"
+              class="pagination-button">
+          {{ paginaAtual }}
+        </span>
+      </div>
+      
+      <ion-button 
+        [disabled]="paginaAtual === totalPaginas" 
+        (click)="mudarPagina(paginaAtual + 1)"
+        fill="clear"
+        class="pagination-button">
+        Próximo
+      </ion-button>
+    </div>
+    
+    <!-- Botão flutuante do carrinho -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab-cart">
+      <ion-fab-button color="primary" (click)="irParaCarrinho($event)">
+        <ion-icon name="cart"></ion-icon>
+        <ion-badge color="danger" *ngIf="carrinhoItens > 0" class="cart-badge">
+          {{ carrinhoItens }}
+        </ion-badge>
+      </ion-fab-button>
+    </ion-fab>
   </div>
 </ion-content>
