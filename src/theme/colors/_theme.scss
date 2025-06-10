@@ -1,0 +1,105 @@
+// Tema de cores da aplicação
+@use 'sass:map';
+@use 'sass:color';
+@use '../../mixins/functions' as *;
+
+// Variável para armazenar as cores
+$theme-colors: $colors !default;
+
+// Função auxiliar para converter hex para rgb
+@function hex-to-rgb($hex) {
+  @return red($hex), green($hex), blue($hex);
+}
+
+:root {
+  // Cores primárias
+  --ion-color-primary: #{map.get(map.get($colors, 'primary'), 'base')};
+  --ion-color-primary-rgb: #{hex-to-rgb(map.get(map.get($colors, 'primary'), 'base'))};
+  --ion-color-primary-contrast: #{map.get(map.get($colors, 'primary'), 'contrast')};
+  --ion-color-primary-contrast-rgb: #{hex-to-rgb(map.get(map.get($colors, 'primary'), 'contrast'))};
+  --ion-color-primary-shade: #{map.get(map.get($colors, 'primary'), 'dark')};
+  --ion-color-primary-tint: #{color.scale(map.get(map.get($colors, 'primary'), 'base'), $lightness: 10%)};
+
+  // Cores secundárias
+  --ion-color-secondary: #{map.get(map.get($colors, 'primary'), 'light')};
+  --ion-color-secondary-rgb: #{hex-to-rgb(map.get(map.get($colors, 'primary'), 'light'))};
+  --ion-color-secondary-contrast: #{map.get(map.get($colors, 'primary'), 'contrast')};
+  --ion-color-secondary-contrast-rgb: #{hex-to-rgb(map.get(map.get($colors, 'primary'), 'contrast'))};
+  --ion-color-secondary-shade: #{color.scale(map.get(map.get($colors, 'primary'), 'light'), $lightness: -10%)};
+  --ion-color-secondary-tint: #{color.scale(map.get(map.get($colors, 'primary'), 'light'), $lightness: 10%)};
+
+  // Cores terciárias
+  --ion-color-tertiary: #{map.get(map.get($colors, 'primary'), 'lighter')};
+  --ion-color-tertiary-rgb: #{hex-to-rgb(map.get(map.get($colors, 'primary'), 'lighter'))};
+  --ion-color-tertiary-contrast: var(--ion-color-dark);
+  --ion-color-tertiary-contrast-rgb: var(--ion-color-dark-rgb);
+  --ion-color-tertiary-shade: #{color.scale(map.get(map.get($colors, 'primary'), 'lighter'), $lightness: -10%)};
+  --ion-color-tertiary-tint: #{color.scale(map.get(map.get($colors, 'primary'), 'lighter'), $lightness: 10%)};
+
+  // Cores de sucesso
+  --ion-color-success: #{map.get(map.get($colors, 'success'), 'base')};
+  --ion-color-success-rgb: #{hex-to-rgb(map.get(map.get($colors, 'success'), 'base'))};
+  --ion-color-success-contrast: #{map.get(map.get($colors, 'success'), 'contrast')};
+  --ion-color-success-contrast-rgb: #{hex-to-rgb(map.get(map.get($colors, 'success'), 'contrast'))};
+  --ion-color-success-shade: #{map.get(map.get($colors, 'success'), 'dark')};
+  --ion-color-success-tint: #{color.scale(map.get(map.get($colors, 'success'), 'base'), $lightness: 10%)};
+
+  // Cores de aviso
+  --ion-color-warning: #{map.get(map.get($colors, 'warning'), 'base')};
+  --ion-color-warning-rgb: #{hex-to-rgb(map.get(map.get($colors, 'warning'), 'base'))};
+  --ion-color-warning-contrast: #{map.get(map.get($colors, 'warning'), 'contrast')};
+  --ion-color-warning-contrast-rgb: #{hex-to-rgb(map.get(map.get($colors, 'warning'), 'contrast'))};
+  --ion-color-warning-shade: #{map.get(map.get($colors, 'warning'), 'dark')};
+  --ion-color-warning-tint: #{color.scale(map.get(map.get($colors, 'warning'), 'base'), $lightness: 10%)};
+
+  // Cores de perigo
+  --ion-color-danger: #{map.get(map.get($colors, 'danger'), 'base')};
+  --ion-color-danger-rgb: #{hex-to-rgb(map.get(map.get($colors, 'danger'), 'base'))};
+  --ion-color-danger-contrast: #{map.get(map.get($colors, 'danger'), 'contrast')};
+  --ion-color-danger-contrast-rgb: #{hex-to-rgb(map.get(map.get($colors, 'danger'), 'contrast'))};
+  --ion-color-danger-shade: #{map.get(map.get($colors, 'danger'), 'dark')};
+  --ion-color-danger-tint: #{color.scale(map.get(map.get($colors, 'danger'), 'base'), $lightness: 10%)};
+
+  // Cores neutras
+  --ion-color-light: #{map.get(map.get($colors, 'neutral'), 'lightest')};
+  --ion-color-light-rgb: #{hex-to-rgb(map.get(map.get($colors, 'neutral'), 'lightest'))};
+  --ion-color-light-contrast: var(--ion-color-dark);
+  --ion-color-light-contrast-rgb: var(--ion-color-dark-rgb);
+  --ion-color-light-shade: #{color.scale(map.get(map.get($colors, 'neutral'), 'lightest'), $lightness: -10%)};
+  --ion-color-light-tint: #{color.scale(map.get(map.get($colors, 'neutral'), 'lightest'), $lightness: 10%)};
+
+  --ion-color-medium: #{map.get(map.get($colors, 'neutral'), 'base')};
+  --ion-color-medium-rgb: #{hex-to-rgb(map.get(map.get($colors, 'neutral'), 'base'))};
+  --ion-color-medium-contrast: var(--ion-color-lightest);
+  --ion-color-medium-contrast-rgb: var(--ion-color-lightest-rgb);
+  --ion-color-medium-shade: #{color.scale(map.get(map.get($colors, 'neutral'), 'base'), $lightness: -10%)};
+  --ion-color-medium-tint: #{color.scale(map.get(map.get($colors, 'neutral'), 'base'), $lightness: 10%)};
+
+  --ion-color-dark: #{map.get(map.get($colors, 'neutral'), 'darker')};
+  --ion-color-dark-rgb: #{hex-to-rgb(map.get(map.get($colors, 'neutral'), 'darker'))};
+  --ion-color-dark-contrast: var(--ion-color-lightest);
+  --ion-color-dark-contrast-rgb: var(--ion-color-lightest-rgb);
+  --ion-color-dark-shade: #{color.scale(map.get(map.get($colors, 'neutral'), 'darker'), $lightness: -10%)};
+  --ion-color-dark-tint: #{color.scale(map.get(map.get($colors, 'neutral'), 'darker'), $lightness: 10%)};
+
+  // Cores de fundo
+  --ion-background-color: var(--ion-color-light);
+  --ion-background-color-rgb: var(--ion-color-light-rgb);
+  --ion-toolbar-background: var(--ion-color-primary);
+  --ion-toolbar-color: var(--ion-color-primary-contrast);
+  --ion-item-background: var(--ion-color-lightest);
+  --ion-card-background: var(--ion-color-lightest);
+  --ion-tab-bar-background: var(--ion-color-lightest);
+  --ion-tab-bar-color: var(--ion-color-medium);
+  --ion-tab-bar-color-selected: var(--ion-color-primary);
+
+  // Cores de texto
+  --ion-text-color: var(--ion-color-dark);
+  --ion-text-color-rgb: var(--ion-color-dark-rgb);
+  --ion-text-color-step-400: #{rgba(var(--ion-text-color-rgb), 0.65)};
+  --ion-text-color-step-600: #{rgba(var(--ion-text-color-rgb), 0.85)};
+
+  // Cores de borda
+  --ion-border-color: #{map-get(map-get($colors, 'neutral'), 'light')};
+  --ion-item-border-color: var(--ion-border-color);
+}

@@ -1,18 +1,97 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Detalhes do Produto</ion-title>
-  </ion-toolbar>
-</ion-header>
+<!-- detalhes.page.html -->
+<app-navbar></app-navbar>
 
-<ion-content *ngIf="produto">
-  <ion-card>
-    <img [src]="produto.image">
-    <ion-card-header>
-      <ion-card-title>{{ produto.title }}</ion-card-title>
-      <ion-card-subtitle>{{ produto.price | priceFormat }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      {{ produto.description }}
-    </ion-card-content>
-  </ion-card>
+<ion-content class="ion-padding" *ngIf="!carregando; else loading">
+  <div class="detail-container">
+    <ion-button fill="clear" routerLink="/home" class="back-button">
+      <ion-icon slot="start" name="arrow-back"></ion-icon>
+      Voltar para a loja
+    </ion-button>
+
+    <div *ngIf="produto">
+      <ion-card class="product-card">
+        <div class="product-image-container">
+          <img [src]="produto.image" [alt]="produto.title">
+        </div>
+        
+        <div class="card-content-wrapper">
+          <ion-card-header>
+            <div class="product-header">
+              <ion-card-title>{{ produto.title }}</ion-card-title>
+              <ion-badge *ngIf="produto.price < 100" color="danger" class="promo-badge">
+                <ion-icon name="pricetag"></ion-icon> Promoção
+              </ion-badge>
+            </div>
+            <div class="price" [class.promo-price]="produto.price < 100">
+              {{ produto.price | priceFormat }}
+              <span *ngIf="produto.price < 100" class="discount-badge">
+                Economize {{ (produto.price * 0.2) | currency:'BRL' }} (20% off)
+              </span>
+            </div>
+          </ion-card-header>
+
+          <ion-card-content>
+            <span class="category-badge">{{ produto.category }}</span>
+            
+            <div class="rating-container">
+              <div class="rating">
+                <ion-icon *ngFor="let star of [1,2,3,4,5]" 
+                         [name]="getStarIcon(star, produto.rating.rate)"></ion-icon>
+              </div>
+              <span class="rating-value">{{ produto.rating.rate | number:'1.1-1' }} ({{ produto.rating.count }} avaliações)</span>
+            </div>
+
+            <span class="section-title">Descrição</span>
+            <p class="description">{{ produto.description }}</p>
+            
+            <div class="quantity-selector ion-margin-vertical">
+              <ion-text class="quantity-label">Quantidade:</ion-text>
+              <div class="quantity-controls">
+                <ion-button (click)="diminuirQuantidade()" fill="clear" size="small" [disabled]="quantidade <= 1">
+                  <ion-icon name="remove"></ion-icon>
+                </ion-button>
+                
+                <ion-input 
+                  type="number" 
+                  [(ngModel)]="quantidade" 
+                  min="1" 
+                  max="100"
+                  class="quantity-input"
+                ></ion-input>
+                
+                <ion-button (click)="aumentarQuantidade()" fill="clear" size="small" [disabled]="quantidade >= 100">
+                  <ion-icon name="add"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+
+            <ion-button expand="block" color="primary" class="add-to-cart" (click)="adicionarAoCarrinho()">
+              <ion-icon name="cart" slot="start"></ion-icon>
+              Adicionar {{ quantidade > 1 ? quantidade + ' itens' : quantidade + ' item' }} - {{ (produto.price * quantidade) | currency:'BRL' }}
+            </ion-button>
+          </ion-card-content>
+        </div>
+      </ion-card>
+    </div>
+
+    <div *ngIf="!produto" class="ion-text-center ion-padding">
+      <ion-text color="danger">
+        <h2>Produto não encontrado</h2>
+      </ion-text>
+      <ion-button routerLink="/home" fill="clear">
+        Voltar para a loja
+      </ion-button>
+    </div>
+  </div>
 </ion-content>
+
+<ng-template #loading>
+  <ion-content class="ion-padding loading-content">
+    <div class="loading-container">
+      <ion-spinner name="crescent" class="loading-spinner"></ion-spinner>
+      <ion-text class="loading-text">
+        <p>Carregando informações do produto...</p>
+      </ion-text>
+    </div>
+  </ion-content>
+</ng-template>

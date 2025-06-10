@@ -2,13 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { DetalhesPage } from './detalhes.page';
+import { RouterModule } from '@angular/router';
+import { CarrinhoPage } from './carrinho.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule
+    IonicModule,
+    RouterModule.forChild([
+      {
+        path: '',
+        component: CarrinhoPage
+      }
+    ])
   ]
 })
-export class DetalhesPageModule {}
+export class CarrinhoPageModule {}

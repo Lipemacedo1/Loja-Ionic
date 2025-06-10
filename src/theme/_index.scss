@@ -1,0 +1,7 @@
+// Importações de funções e variáveis
+@use 'sass:map';
+@use 'sass:color';
+@use './mixins/functions' as *;
+
+// Importa as cores base
+@use './colors' as *;

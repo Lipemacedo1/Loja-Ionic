@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePage } from './home/home.page';
 
-const appRoutes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     redirectTo: 'home',
@@ -16,11 +16,11 @@ const appRoutes: Routes = [
     loadComponent: () => import('./detalhes/detalhes.page').then(m => m.DetalhesPage)
   },
   {
+    path: 'carrinho',
+    loadComponent: () => import('./carrinho/carrinho.page').then(m => m.CarrinhoPage)
+  },
+  {
     path: '**',
     redirectTo: 'home',
   },
 ];
-
-export { appRoutes };
-
-export default appRoutes;

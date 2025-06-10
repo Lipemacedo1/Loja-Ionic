@@ -1,16 +1,29 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { RouteReuseStrategy } from '@angular/router';
-
+import { provideRouter } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { provideHttpClient } from '@angular/common/http';
+import { routes as appRoutes } from './routes';
+import { SearchService } from './services/search.service';
 
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(appRoutes),
+    provideHttpClient(),
+    SearchService,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    importProvidersFrom(
+      IonicModule.forRoot({
+        mode: 'md',
+        backButtonText: 'Voltar',
+        backButtonIcon: 'arrow-back',
+        animated: true
+      })
+    )
+  ]
+};
 
-@NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
+// Exportação padrão para compatibilidade com a importação em main.ts
+export default appConfig;

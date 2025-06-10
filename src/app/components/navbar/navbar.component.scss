@@ -1,0 +1,111 @@
+// Logo
+.logo-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0;
+  
+  .logo-image {
+    height: 24px; // Ajuste a altura conforme necessário
+    width: auto;
+    object-fit: contain;
+  }
+}
+
+// Barra de busca
+.search-container {
+  flex: 1;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  
+  ion-searchbar {
+    width: 100%;
+    --background: white;
+    --border-radius: 20px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --placeholder-color: var(--ion-color-medium);
+    --color: var(--ion-color-dark);
+    --icon-color: var(--ion-color-medium);
+    padding: 8px 0;
+    
+    &.searchbar-has-focus {
+      --box-shadow: 0 2px 12px rgba(var(--ion-color-primary-rgb), 0.2);
+    }
+    
+    .searchbar-input-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .searchbar-search-icon {
+      display: none !important;
+    }
+    
+    .searchbar-clear-button {
+      display: flex !important;
+    }
+  }
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 8px;
+
+  .nav-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--ion-color-medium);
+    font-size: 12px;
+    transition: all 0.2s ease;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+
+    ion-icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+      transition: color 0.2s ease;
+    }
+
+    span {
+      display: block;
+      font-weight: 500;
+    }
+
+    &:hover, &.active {
+      color: var(--ion-color-primary);
+      background: rgba(var(--ion-color-primary-rgb), 0.1);
+    }
+
+    &:hover, &.active {
+      color: var(--ion-color-primary);
+      background: rgba(var(--ion-color-primary-rgb), 0.1);
+    }
+  }
+}
+
+ion-toolbar {
+  --background: white;
+  --color: #333;
+  --border-width: 0 !important;
+  padding: 8px 16px;
+  
+  @media (min-width: 768px) {
+    padding: 8px 64px;
+  }
+}
+
+ion-title {
+  font-weight: 600;
+}

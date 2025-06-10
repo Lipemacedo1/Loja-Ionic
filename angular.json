@@ -50,13 +50,19 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "buildTarget": "app:build"
+          },
           "configurations": {
             "production": {
               "buildTarget": "projeto:build:production"
             },
             "development": {
-              "buildTarget": "projeto:build:development"
+              "buildTarget": "app:build:development"
+            },
+            "ci": {
+              "buildTarget": "app:build:ci"
             }
           },
           "defaultConfiguration": "development"

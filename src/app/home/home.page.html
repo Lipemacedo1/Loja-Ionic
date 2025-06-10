@@ -1,18 +1,114 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Loja Virtual</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-navbar></app-navbar>
 
 <ion-content>
-  <ion-card *ngFor="let produto of produtos" (click)="verDetalhes(produto.id)">
-    <img [src]="produto.image">
-    <ion-card-header>
-      <ion-card-title>{{ produto.title | uppercase }}</ion-card-title>
-      <ion-card-subtitle>{{ produto.price | priceFormat }}</ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      {{ produto.description | slice:0:100 }}...
-    </ion-card-content>
-  </ion-card>
+  <div class="home-container">
+    <div class="section-header">
+      <h1>Nossos Produtos</h1>
+      <p>Encontre os melhores produtos com os melhores preços</p>
+    </div>
+    
+    <div *ngIf="carregando" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Carregando produtos...</p>
+    </div>
+    
+    <!-- Indicador de busca -->
+    <div *ngIf="buscando" class="searching-indicator">
+      <ion-spinner name="crescent" class="search-spinner"></ion-spinner>
+      <span>Buscando produtos...</span>
+    </div>
+
+    <div *ngIf="!carregando && produtosFiltrados.length === 0" class="empty-state">
+      <ion-icon name="search-outline"></ion-icon>
+      <h2>Nenhum produto encontrado</h2>
+      <p *ngIf="produtos.length > 0">Não encontramos produtos que correspondam à sua busca.</p>
+      <p *ngIf="produtos.length === 0">Não conseguimos carregar os produtos no momento.</p>
+      <ion-button (click)="carregarProdutos()" fill="clear">
+        <ion-icon slot="start" name="refresh"></ion-icon>
+        {{ produtos.length > 0 ? 'Limpar busca' : 'Tentar novamente' }}
+      </ion-button>
+    </div>
+
+    <div class="products-grid" [class.filtering]="buscando">
+      <ion-card 
+        *ngFor="let produto of produtosFiltrados" 
+        class="product-card" 
+        [class.promocao]="produto.price < 100"
+        (click)="verDetalhes(produto.id)">
+        
+        <!-- Ribbon de promoção -->
+        <div *ngIf="produto.price < 100" class="promo-ribbon">
+          <ion-icon name="pricetag"></ion-icon>
+          <span>PROMOÇÃO</span>
+        </div>
+        
+        <div class="product-image">
+          <img [src]="produto.image" [alt]="produto.title" />
+        </div>
+        <ion-card-header>
+          <ion-card-title>{{ produto.title | slice:0:30 }}{{ produto.title.length > 30 ? '...' : '' }}</ion-card-title>
+          <ion-card-subtitle>{{ produto.category }}</ion-card-subtitle>
+          
+          <!-- Preço com destaque para promoção -->
+          <div class="price-container" [class.promo-price]="produto.price < 100">
+            <span class="price">{{ produto.price | currency:'BRL':'symbol':'1.2-2' }}</span>
+            <span *ngIf="produto.price < 100" class="discount-badge">
+              Economize {{ (produto.price * 0.2) | currency:'BRL' }}
+            </span>
+          </div>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="product-actions">
+            <ion-button 
+              size="small" 
+              color="primary" 
+              (click)="$event.stopPropagation(); adicionarAoCarrinho(produto, $event)">
+              <ion-icon name="cart" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+          <p class="product-description">
+            {{ produto.description | slice:0:100 }}{{ produto.description.length > 100 ? '...' : '' }}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Controles de Paginação -->
+    <div class="pagination-container" *ngIf="!carregando && produtosFiltrados.length > 0">
+      <ion-button 
+        [disabled]="paginaAtual === 1" 
+        (click)="mudarPagina(paginaAtual - 1)"
+        fill="clear"
+        class="pagination-button">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        Anterior
+      </ion-button>
+      
+      <div class="page-numbers">
+        <span 
+              [class.active]="true"
+              class="pagination-button">
+          {{ paginaAtual }}
+        </span>
+      </div>
+      
+      <ion-button 
+        [disabled]="paginaAtual === totalPaginas" 
+        (click)="mudarPagina(paginaAtual + 1)"
+        fill="clear"
+        class="pagination-button">
+        Próximo
+      </ion-button>
+    </div>
+    
+    <!-- Botão flutuante do carrinho -->
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed" class="fab-cart">
+      <ion-fab-button color="primary" (click)="irParaCarrinho($event)">
+        <ion-icon name="cart"></ion-icon>
+        <ion-badge color="danger" *ngIf="carrinhoItens > 0" class="cart-badge">
+          {{ carrinhoItens }}
+        </ion-badge>
+      </ion-fab-button>
+    </ion-fab>
+  </div>
 </ion-content>
