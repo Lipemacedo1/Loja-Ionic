@@ -3,12 +3,17 @@
   display: flex;
   align-items: center;
   height: 100%;
-  padding: 0;
+  padding: 0 16px;
   
   .logo-image {
-    height: 24px; // Ajuste a altura conforme necessário
+    height: 28px;
     width: auto;
     object-fit: contain;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
   }
 }
 
@@ -54,8 +59,9 @@
 .nav-buttons {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding-right: 8px;
+  gap: 4px;
+  padding: 0 8px;
+  height: 100%;
 
   .nav-button {
     display: flex;
@@ -64,33 +70,55 @@
     justify-content: center;
     text-decoration: none;
     color: var(--ion-color-medium);
-    font-size: 12px;
-    transition: all 0.2s ease;
-    padding: 6px 8px;
-    border-radius: 8px;
+    font-size: 10px;
+    transition: all 0.3s ease;
+    padding: 6px 10px;
+    border-radius: 12px;
     background: transparent;
     border: none;
     cursor: pointer;
+    height: 100%;
+    min-width: 60px;
+    position: relative;
 
     ion-icon {
-      font-size: 20px;
+      font-size: 22px;
       margin-bottom: 2px;
-      transition: color 0.2s ease;
+      transition: all 0.3s ease;
     }
 
     span {
       display: block;
       font-weight: 500;
+      white-space: nowrap;
+    }
+
+    ion-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 10px;
+      min-width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      border-radius: 8px;
     }
 
     &:hover, &.active {
       color: var(--ion-color-primary);
-      background: rgba(var(--ion-color-primary-rgb), 0.1);
+      background: rgba(var(--ion-color-primary-rgb), 0.08);
+      transform: translateY(-2px);
+      
+      ion-icon {
+        transform: scale(1.1);
+      }
     }
-
-    &:hover, &.active {
-      color: var(--ion-color-primary);
-      background: rgba(var(--ion-color-primary-rgb), 0.1);
+    
+    &:active {
+      transform: translateY(0);
     }
   }
 }
@@ -99,6 +127,10 @@ ion-toolbar {
   --background: white;
   --color: #333;
   --border-width: 0 !important;
+  --min-height: 64px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 10;
   padding: 8px 16px;
   
   @media (min-width: 768px) {

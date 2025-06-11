@@ -1,7 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule, ToastController } from '@ionic/angular';
+import { 
+  IonContent,
+  IonButton,
+  IonIcon,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonCardContent,
+  IonBadge,
+  IonSpinner,
+  ToastController,
+  IonText,
+  IonInput
+} from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { PriceFormatPipe } from '../pipes/price-format.pipe';
 import { ProdutoService } from '../services/produto.service';
@@ -15,16 +28,27 @@ import { NavbarComponent } from '../components/navbar/navbar.component';
   standalone: true,
   imports: [
     CommonModule, 
-    IonicModule, 
-    RouterModule, 
-    PriceFormatPipe, 
+    FormsModule,
+    RouterModule,
+    PriceFormatPipe,
     NavbarComponent,
-    FormsModule
+    IonContent,
+    IonButton,
+    IonIcon,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonCardContent,
+    IonBadge,
+    IonSpinner,
+    IonText,
+    IonInput
   ]
 })
 export class DetalhesPage implements OnInit {
   produto: any;
   carregando = true;
+  quantidade: number = 1;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,7 +56,36 @@ export class DetalhesPage implements OnInit {
     private produtoService: ProdutoService,
     private carrinhoService: CarrinhoService,
     private toastController: ToastController
-  ) {}
+  ) {
+    // Inicializa os ícones usados no componente
+    this.initializeIcons();
+  }
+
+  private initializeIcons() {
+    // Adiciona os ícones usados no template
+    const icons = {
+      'arrow-back': 'arrow-back',
+      'pricetag': 'pricetag',
+      'star': 'star',
+      'star-half': 'star-half',
+      'star-outline': 'star-outline',
+      'remove': 'remove',
+      'add': 'add',
+      'cart': 'cart',
+      'close': 'close'
+    };
+    
+    // Adiciona os ícones diretamente no construtor
+    // Isso é necessário porque o Ionic 7+ não suporta mais o addIcons global
+    Object.entries(icons).forEach(([name, value]) => {
+      if (!document.querySelector(`ion-icon[name="${name}"]`)) {
+        const icon = document.createElement('ion-icon');
+        icon.setAttribute('name', value);
+        icon.style.display = 'none';
+        document.body.appendChild(icon);
+      }
+    });
+  }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
@@ -53,7 +106,27 @@ export class DetalhesPage implements OnInit {
     }
   }
 
-  quantidade: number = 1;
+  aumentarQuantidade() {
+    if (this.quantidade < 100) {
+      this.quantidade++;
+    }
+  }
+
+  diminuirQuantidade() {
+    if (this.quantidade > 1) {
+      this.quantidade--;
+    }
+  }
+
+  getStarIcon(star: number, rating: number): string {
+    if (star <= rating) {
+      return 'star';
+    } else if (star - 0.5 <= rating) {
+      return 'star-half';
+    } else {
+      return 'star-outline';
+    }
+  }
 
   async adicionarAoCarrinho() {
     if (this.produto) {
@@ -80,40 +153,13 @@ export class DetalhesPage implements OnInit {
         color: 'success',
         buttons: [
           {
-            text: 'Ver Carrinho',
-            handler: () => {
-              this.router.navigate(['/carrinho']);
-            }
+            icon: 'close',
+            role: 'cancel'
           }
         ]
       });
       
       await toast.present();
-      
-      // Resetar a quantidade após adicionar ao carrinho
-      this.quantidade = 1;
-    }
-  }
-  
-  aumentarQuantidade() {
-    if (this.quantidade < 100) {
-      this.quantidade++;
-    }
-  }
-  
-  diminuirQuantidade() {
-    if (this.quantidade > 1) {
-      this.quantidade--;
-    }
-  }
-
-  getStarIcon(index: number, rating: number): string {
-    if (index <= Math.floor(rating)) {
-      return 'star';
-    } else if (index - 0.5 <= rating) {
-      return 'star-half';
-    } else {
-      return 'star-outline';
     }
   }
 }

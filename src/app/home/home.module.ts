@@ -16,8 +16,7 @@ import { HighlightDirective } from '../directives/highlight.directive';
     IonicModule,
     HomePageRoutingModule,
 
-    // IMPORTANDO componentes standalone corretamente:
-    HomePage,
+    // Importando pipes e diretivas necessárias
     PriceFormatPipe,
     HighlightDirective
   ]

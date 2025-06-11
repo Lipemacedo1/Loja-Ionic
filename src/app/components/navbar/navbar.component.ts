@@ -1,22 +1,58 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule, ActivatedRoute } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { 
+  IonToolbar, 
+  IonIcon, 
+  IonBadge,
+  IonSearchbar
+} from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Subscription, BehaviorSubject } from 'rxjs';
 import { CarrinhoService } from '../../services/carrinho.service';
-import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
+
+import { addIcons } from 'ionicons';
+import {
+  homeOutline,
+  home,
+  pricetagOutline,
+  pricetag,
+  searchOutline,
+  close,
+  cartOutline,
+  cart
+} from 'ionicons/icons';
+
+// Adiciona os ícones necessários
+addIcons({
+  'home-outline': homeOutline,
+  'home': home,
+  'pricetag-outline': pricetagOutline,
+  'pricetag': pricetag,
+  'search-outline': searchOutline,
+  'close': close,
+  'cart-outline': cartOutline,
+  'cart': cart
+});
+
+// Interface para os parâmetros da rota
+interface RouteParams {
+  promocao?: string;
+}
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [
     CommonModule, 
-    RouterModule, 
-    IonicModule,
-    FormsModule
+    RouterModule,
+    FormsModule,
+    IonToolbar,
+    IonIcon,
+    IonBadge,
+    IonSearchbar
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
@@ -29,12 +65,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private searchSubscription: Subscription | undefined;
   private _isPromocao: boolean = false;
   
+  private route = inject(ActivatedRoute);
+  
   constructor(
     private searchService: SearchService,
     public router: Router,
-    private route: ActivatedRoute,
     private carrinhoService: CarrinhoService
-  ) {}
+  ) {
+    // Verifica os parâmetros da rota para definir o estado de promoção
+    this.route.queryParams.subscribe((params: RouteParams) => {
+      this._isPromocao = params.promocao === 'true';
+    });
+  }
 
   ngOnInit(): void {
     // Inicializa a busca com uma string vazia quando o componente é carregado
