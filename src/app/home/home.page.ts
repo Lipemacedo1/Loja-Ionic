@@ -28,6 +28,8 @@ import { ToastController } from '@ionic/angular';
   ]
 })
 export class HomePage implements OnInit, OnDestroy {
+  // Objeto para rastrear as quantidades de cada produto
+  private quantidades: { [key: number]: number } = {};
   produtos: any[] = [];
   produtosFiltrados: any[] = [];
   carrinhoItens: number = 0; // Contador de itens no carrinho
@@ -208,27 +210,50 @@ export class HomePage implements OnInit, OnDestroy {
     this.router.navigate(['/detalhes', id]);
   }
 
+  // Obtém a quantidade atual de um produto
+  getQuantity(productId: number): number {
+    return this.quantidades[productId] || 1;
+  }
+
+  // Atualiza a quantidade de um produto
+  updateQuantity(produto: any, change: number) {
+    const currentQty = this.getQuantity(produto.id);
+    const newQty = Math.max(1, currentQty + change);
+    this.quantidades[produto.id] = newQty;
+  }
+
   async adicionarAoCarrinho(produto: any, event: Event) {
     // Impede a propagação do evento para o card
     event.stopPropagation();
     
-    // Cria o item do carrinho
-    const itemCarrinho: Omit<CarrinhoItem, 'quantidade'> = {
+    const quantidade = this.getQuantity(produto.id);
+    
+    // Cria o item do carrinho com a quantidade selecionada
+    const itemCarrinho: CarrinhoItem = {
       id: produto.id,
       title: produto.title,
       price: produto.price,
       image: produto.image,
       description: produto.description,
       category: produto.category,
-      rating: produto.rating
+      rating: produto.rating,
+      quantidade: quantidade // Adiciona a quantidade ao item do carrinho
     };
     
-    // Adiciona o item ao carrinho
+    // Adiciona o item ao carrinho com a quantidade correta
     this.carrinhoService.adicionarItem(itemCarrinho);
+    
+    // Reseta a quantidade para 1 após adicionar ao carrinho
+    this.quantidades[produto.id] = 1;
+    
+    // Atualiza o contador do carrinho
+    this.atualizarContadorItens();
     
     // Exibe um toast de confirmação
     const toast = await this.toastController.create({
-      message: `${produto.title} adicionado ao carrinho!`,
+      message: quantidade > 1 ? 
+        `${quantidade} itens de ${produto.title} adicionados ao carrinho!` :
+        `${produto.title} adicionado ao carrinho!`,
       duration: 2000,
       position: 'bottom',
       color: 'success',

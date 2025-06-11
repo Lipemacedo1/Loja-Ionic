@@ -58,12 +58,22 @@
           </div>
         </ion-card-header>
         <ion-card-content>
+          <div class="quantity-selector">
+            <ion-button size="small" fill="clear" (click)="$event.stopPropagation(); updateQuantity(produto, -1)">
+              <ion-icon name="remove"></ion-icon>
+            </ion-button>
+            <span class="quantity">{{ getQuantity(produto.id) }}</span>
+            <ion-button size="small" fill="clear" (click)="$event.stopPropagation(); updateQuantity(produto, 1)">
+              <ion-icon name="add"></ion-icon>
+            </ion-button>
+          </div>
           <div class="product-actions">
             <ion-button 
-              size="small" 
+              expand="block"
               color="primary" 
               (click)="$event.stopPropagation(); adicionarAoCarrinho(produto, $event)">
-              <ion-icon name="cart" slot="icon-only"></ion-icon>
+              <ion-icon name="cart" slot="start"></ion-icon>
+              Adicionar
             </ion-button>
           </div>
           <p class="product-description">
